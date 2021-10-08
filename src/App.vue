@@ -3,29 +3,46 @@
     <div class="container">
       <h1>欢迎使用wsy待办事项</h1>
 
-      <todo-add />
+      <todo-add :tid="todo?.length ?? 0" @add-todo="addTodo" />
 
       <todo-filter></todo-filter>
 
-      <todo-list></todo-list>
+      <todo-list :todos="todos"></todo-list>
     </div>
   </main>
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
 import TodoAdd from "./components/TodoAdd.vue";
 import TodoFilter from "./components/TodoFilter.vue";
 import TodoList from "./components/TodoList.vue";
+import { reactive, toRefs } from "vue";
 
-@Options({
+interface DataProps {
+  todos: string[];
+  addTodo: (todo: string) => void;
+}
+
+export default {
+  name: "App",
   components: {
     TodoAdd,
     TodoFilter,
     TodoList,
   },
-})
-export default class App extends Vue {}
+  setup() {
+    const data: DataProps = reactive({
+      todos: [],
+      addTodo: (todo: string) => {
+        data.todos.push(todo);
+      },
+    });
+    const refData = toRefs(data);
+    return {
+      ...refData,
+    };
+  },
+};
 </script>
 
 <style>
