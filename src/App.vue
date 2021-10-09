@@ -19,7 +19,7 @@
 import TodoAdd from "./components/TodoAdd.vue";
 import TodoFilter from "./components/TodoFilter.vue";
 import TodoList from "./components/TodoList.vue";
-import { reactive, toRefs, ref, computed } from "vue";
+import { reactive, toRefs, computed } from "vue";
 
 interface DataProps {
   todos: todosProps[];

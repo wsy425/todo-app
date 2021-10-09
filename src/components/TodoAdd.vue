@@ -14,22 +14,26 @@ export default {
   name: "TodoAdd",
   props: ["tid"],
   setup(props, context) {
-    const todoContent = ref("");
-    const emitAddTodo = () => {
-      const todo = {
-        id: props.tid,
-        content: todoContent.value,
-        comleted: false,
-      };
-      context.emit("add-todo", todo);
-      todoContent.value = "";
-    };
-    return {
-      todoContent,
-      emitAddTodo,
-    };
+    return useEmitAddTodo(props.tid, context.emit);
   },
 };
+
+function useEmitAddTodo(tid, emit) {
+  const todoContent = ref("");
+  const emitAddTodo = () => {
+    const todo = {
+      id: tid,
+      content: todoContent.value,
+      comleted: false,
+    };
+    emit("add-todo", todo);
+    todoContent.value = "";
+  };
+  return {
+    todoContent,
+    emitAddTodo,
+  };
+}
 </script>
 
 <style>
