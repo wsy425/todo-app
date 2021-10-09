@@ -5,9 +5,12 @@
 
       <todo-add :tid="todo?.length ?? 0" @add-todo="addTodo" />
 
-      <todo-filter></todo-filter>
+      <todo-filter
+        :selected="filter"
+        @change-filter="filter = $event"
+      ></todo-filter>
 
-      <todo-list :todos="todos"></todo-list>
+      <todo-list :todos="filterTodos"></todo-list>
     </div>
   </main>
 </template>
@@ -16,11 +19,19 @@
 import TodoAdd from "./components/TodoAdd.vue";
 import TodoFilter from "./components/TodoFilter.vue";
 import TodoList from "./components/TodoList.vue";
-import { reactive, toRefs } from "vue";
+import { reactive, toRefs, ref, computed } from "vue";
 
 interface DataProps {
-  todos: string[];
-  addTodo: (todo: string) => void;
+  todos: todosProps[];
+  addTodo: (todo: todosProps) => void;
+  filter: string;
+  filterTodos: todosProps[];
+}
+
+interface todosProps {
+  id: number;
+  content: string;
+  comleted: boolean;
 }
 
 export default {
@@ -33,9 +44,20 @@ export default {
   setup() {
     const data: DataProps = reactive({
       todos: [],
-      addTodo: (todo: string) => {
+      addTodo: (todo: todosProps) => {
         data.todos.push(todo);
       },
+      filter: "all",
+      filterTodos: computed(() => {
+        switch (data.filter) {
+          case "done":
+            return data.todos.filter((todo) => todo.comleted);
+          case "todo":
+            return data.todos.filter((todo) => !todo.comleted);
+          default:
+            return data.todos;
+        }
+      }),
     });
     const refData = toRefs(data);
     return {

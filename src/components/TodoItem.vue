@@ -1,7 +1,11 @@
 <template>
-  <div class="todo-item">
+  <div class="todo-item" :class="{ done: todoItem.comleted }">
     <label>
-      <input type="checkbox" :checked="todoItem.comleted" />
+      <input
+        type="checkbox"
+        :checked="todoItem.comleted"
+        @click="$emit('change-state', $event)"
+      />
       {{ todoItem.content }}
       <span class="check-button"></span>
     </label>
@@ -27,6 +31,11 @@ export default {
   position: relative;
   display: flex;
   align-items: center;
+}
+
+.todo-item.done label {
+  text-decoration: line-through;
+  font-style: italic;
 }
 
 .todo-item label span.check-button {
